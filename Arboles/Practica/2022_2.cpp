@@ -79,5 +79,6 @@ int main(){
     printPreOrder(tree.root);
 
     //hola como estas
+    //muy bien, y usted?
     return 0;
 }

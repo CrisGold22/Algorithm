@@ -77,8 +77,6 @@ int main(){
     insert(tree.root, 10, 1, 7);
 
     printPreOrder(tree.root);
-
-    //hola como estas
-    //muy bien, y usted?
+    
     return 0;
 }

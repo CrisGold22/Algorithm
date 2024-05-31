@@ -57,16 +57,43 @@ void insert(Nodo *&root, int camp1, int camp2, int camp3){
 void printPreOrder(Nodo *root){
 
     if(root != nullptr){
-        cout<<root->camp1<<","<<root->camp2<<" "<<root->camp3<<","<<" ";
+        cout<<root->camp1<<","<<root->camp2<<","<<root->camp3<<" ";
         printPreOrder(root->left);
         printPreOrder(root->right);
     }
 
 }
 
+void searchElement(Nodo *root, int camp1, int camp2, int camp3, bool &condition){
+
+    if(root == nullptr){
+        condition = false;
+        return;
+    }
+
+    if(root->camp1 == camp1 and root->camp2 == camp2 and root->camp3 == camp3){
+        condition = true;
+        return ;
+    }
+
+    if(camp1 > root->camp1){
+        searchElement(root->right,  camp1,  camp2,  camp3, condition);
+    }
+    else if(camp1 == root->camp1 and camp2 > root->camp2){
+        searchElement(root->right,  camp1,  camp2,  camp3, condition);
+    }
+    else if(camp1 == root->camp1 and camp2 < root->camp2){
+        searchElement(root->left,  camp1,  camp2,  camp3, condition);
+    }
+    else{
+        searchElement(root->left,  camp1,  camp2,  camp3, condition);
+    }
+}
+
 int main(){
 
     Tree tree;
+    bool condition = false;
 
     buildTree(tree);
     insert(tree.root, 10, 8, 5);
@@ -77,6 +104,10 @@ int main(){
     insert(tree.root, 10, 1, 7);
 
     printPreOrder(tree.root);
-    
+    cout<<endl;
+    searchElement(tree.root, 15, 10, 3, condition);
+    cout<<condition<<endl;
+
+
     return 0;
 }

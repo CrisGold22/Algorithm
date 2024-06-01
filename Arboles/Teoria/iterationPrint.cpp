@@ -115,6 +115,38 @@ void posOrderPrint(Nodo *root){
 
 }
 
+void postorderTraversal(Nodo* root) {
+    if (root == nullptr) return;
+
+    stack<Nodo*> s;
+    Nodo* current = root;
+    Nodo* lastVisited = nullptr;
+
+    while (current || !s.empty()) {
+        if (current) {
+            s.push(current);
+            current = current->left;
+        } else {
+            Nodo* nodo = s.top();
+            if (nodo->right && lastVisited != nodo->right) {
+                current = nodo->right;
+            } else {
+                cout << nodo->dato << " ";
+                lastVisited = nodo;
+                s.pop();
+            }
+        }
+    }
+}
+
+void printPosOrder(Nodo *root){
+    if(root != nullptr){
+        printPosOrder(root->left);
+        printPosOrder(root->right);
+        cout<<root->dato<<" ";
+    }
+}
+
 int main(){
     Arbol arbol;
 
@@ -133,6 +165,10 @@ int main(){
     inOrderPrint(arbol.root);
     cout<<endl;
     posOrderPrint(arbol.root);
+    cout<<endl;
+    postorderTraversal(arbol.root);
+    cout<<endl;
+    printPosOrder(arbol.root);
 
     return 0;
 }

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <queue>
+#include <stack>
 #include <algorithm>
 using namespace std;
 
@@ -113,6 +115,63 @@ bool isBalancedTree(Nodo *root){
     }
 }
 
+Nodo *findLCA(Nodo *root, int num1, int num2){
+
+    if(root == nullptr){
+        return 0;
+    }
+
+    if(root->dato > num1 and root->dato > num2){
+        return findLCA(root->left, num1, num2);
+    }
+
+    if(root->dato < num1 and root->dato < num2){
+        return findLCA(root->right, num1, num2);
+    }
+
+    return root;
+}
+
+void goThroughLevels(Nodo *root){
+    if(root == nullptr){
+        return ;
+    }
+
+    queue <Nodo *> cola;
+    cola.push(root);
+
+    while(!cola.empty()){
+        Nodo *nodo = cola.front();
+        cola.pop();
+
+        cout<<nodo->dato<<" ";
+        if(nodo->left != nullptr){
+            cola.push(nodo->left);
+        }
+        if(nodo->right != nullptr){
+            cola.push(nodo->right);
+        }
+    }
+}
+
+int findingNodoLevel(Nodo *root, int element, int level){
+    if(root == nullptr){
+        return -1;
+    }
+    
+    if(root->dato == element){
+        return level;
+    }
+
+    if(element > root->dato){
+        return findingNodoLevel(root->right, element, level + 1);
+    }
+    else{
+        return findingNodoLevel(root->left, element, level + 1);
+    }
+
+}
+
 int main(){
 
     Arbol arbol;
@@ -146,6 +205,7 @@ int main(){
     cout<<"Height: "<<height<<endl;
     cout<<"Number of leafs: "<<leafsTree(arbol.root)<<endl;
     cout<<"Is it balanced?: "<<isBalancedTree(arbol.root)<<endl;
-
+    cout<<"What level is 4?: "<<findingNodoLevel(arbol.root, 4, 0)<<endl;
+    
     return 0;
 }

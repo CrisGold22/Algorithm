@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <queue>
 #include <cmath>
 
 using namespace std;
@@ -73,21 +74,21 @@ void printInOrder(Nodo *root){
     }
 
 }
-Nodo* balancearArbol(Nodo* root){
-    if(root==NULL){
-        return NULL;
+
+Nodo *findLCA(Nodo *root, int num1, int num2){
+
+    if(root == nullptr){
+        return 0;
     }
-    Nodo* arbol_balanceado_izq = balancearArbol(root->left);
-    Nodo* arbol_balanceado_der = balancearArbol(root->right);
-    
-    if(arbol_balanceado_izq !=NULL){
-        arbol_balanceado_izq->right = root;
-        root->left = NULL;
+
+    if(root->dato > num1 and root->dato > num2){
+        return findLCA(root->left, num1, num2);
     }
-    if(arbol_balanceado_der !=NULL){
-        root->right = arbol_balanceado_der;
-        return arbol_balanceado_der;
+
+    if(root->dato < num1 and root->dato < num2){
+        return findLCA(root->right, num1, num2);
     }
+
     return root;
 }
 
@@ -121,9 +122,10 @@ int main(){
             }
         }
     }
-    printInOrder(tree.root);
-
-
+    printInOrder(tree.root); // unbalanced
+    
+    Nodo *number = findLCA(tree.root, 1, 4);
+    cout<<number->dato<<endl;
 
     return 0;
 }

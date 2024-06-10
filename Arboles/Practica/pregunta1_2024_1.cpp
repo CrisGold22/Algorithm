@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include <cmath>
 using namespace std;
 
@@ -64,10 +65,57 @@ void plantarArbolBinario(struct Tree & arbol, struct Tree arbolIzquierdo,
     arbol.root = nuevoNodo;
 }
 
+int leafsTree(Nodo *root){
+    if(root == nullptr){
+        return 0;
+    }
+    else if (root->left == nullptr and root->right == nullptr){
+        return 1;
+    }
+    else{
+        return leafsTree(root->left) + leafsTree(root->right);
+    }
+}
 
+int nodosCounter(Nodo *root){
+    if(root == nullptr){
+        return 0;
+    }
+    return 1 + nodosCounter(root->left) + nodosCounter(root->right);
+}
 
-Tree aplicarArbol(Tree sistema, Tree paquete, Tree &resultado){
-   // aplicarArbolNodo(sistema.root, paquete.root, resultado.root);
+void aplicarArbolNodo(Nodo *sistema, Nodo *paquete, Nodo *resultado){
+
+    queue <Nodo*> cola1, cola2;
+
+    cola1.push(sistema);
+    cola2.push(paquete);
+
+    while(!cola1.empty() or !cola2.empty()){
+        Nodo *nodoSistema = cola1.front();
+        Nodo *nodoPaquete = cola2.front();
+
+        cola1.pop();
+        cola2.pop();
+
+        int cantLeafs = leafsTree(nodoSistema);
+        int cantNodos = nodosCounter(nodoSistema);
+
+        insert(resultado, nodoPaquete->element + cantNodos - cantLeafs);
+
+        if(nodoSistema->left and nodoPaquete->left){
+            aplicarArbolNodo(sistema->left, paquete->left, resultado);
+        }
+        if(nodoSistema->right and nodoPaquete->right){
+            aplicarArbolNodo(sistema->right, paquete->right, resultado);
+        }
+        
+    }
+
+}
+
+void aplicarArbol(Tree sistema, Tree paquete, Tree &resultado){
+   aplicarArbolNodo(sistema.root, paquete.root, resultado.root);
 }
 
 int main(){

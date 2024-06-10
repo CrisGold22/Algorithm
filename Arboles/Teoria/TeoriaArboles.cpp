@@ -172,6 +172,13 @@ int findingNodoLevel(Nodo *root, int element, int level){
 
 }
 
+int nodosTree(Nodo *root){
+    if(root == nullptr){
+        return 0;
+    }
+    return 1 + nodosTree(root->left) + nodosTree(root->right);
+}
+
 int main(){
 
     Arbol arbol;
@@ -206,6 +213,7 @@ int main(){
     cout<<"Number of leafs: "<<leafsTree(arbol.root)<<endl;
     cout<<"Is it balanced?: "<<isBalancedTree(arbol.root)<<endl;
     cout<<"What level is 4?: "<<findingNodoLevel(arbol.root, 4, 0)<<endl;
-    
+    cout<<"Number of Nodos: "<<nodosTree(arbol.root)<<endl;
+
     return 0;
 }

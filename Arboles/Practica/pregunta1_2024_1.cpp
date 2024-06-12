@@ -84,7 +84,7 @@ int nodosCounter(Nodo *root){
     return 1 + nodosCounter(root->left) + nodosCounter(root->right);
 }
 
-void aplicarArbolNodo(Nodo *sistema, Nodo *paquete, Nodo *resultado){
+void aplicarArbolNodo(Nodo *sistema, Nodo *paquete, Nodo *&resultado){
 
     queue <Nodo*> cola1, cola2;
 
@@ -143,8 +143,11 @@ int main(){
     plantarArbolBinario(packedTree, tree1, 1, tree2);
 
     printInOrder(packedTree.root);
+    cout<<endl;
 
     aplicarArbol(systemTree, packedTree, resultTree);
+
+    printInOrder(resultTree.root);
 
     return 0;
 }

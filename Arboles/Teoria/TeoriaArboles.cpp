@@ -179,6 +179,21 @@ int nodosTree(Nodo *root){
     return 1 + nodosTree(root->left) + nodosTree(root->right);
 }
 
+void plantarArbolBinario(struct Arbol & arbol, struct Nodo * arbolIzquierdo,
+                         int elemento, struct Nodo * arbolDerecho){
+    
+    struct Nodo * nuevoNodo = createNodo(elemento, arbolIzquierdo, arbolDerecho);
+    arbol.root = nuevoNodo;
+}
+
+void plantarArbolBinario(struct Arbol & arbol, struct Arbol arbolIzquierdo,
+                         int elemento, struct Arbol arbolDerecho){
+    
+    struct Nodo * nuevoNodo = createNodo(elemento, arbolIzquierdo.root, arbolDerecho.root);
+    arbol.root = nuevoNodo;
+}
+
+
 int main(){
 
     Arbol arbol;

@@ -46,14 +46,31 @@ void insertarElemento(Nodo *&nodo, int elemento){
 
 }
 
-void printNodo(Nodo *root){
+//inserta sin criterio de izquierda a derecha
+void insertLR(struct Nodo *& raiz, int elemento){
+    if(raiz == nullptr){
+        Nodo *newNodo = createNodo(elemento, nullptr, nullptr);
+        raiz = newNodo;
+    }
+    else{
+        if (raiz->left==nullptr)
+            insertarElemento(raiz->left, elemento);
+        else
+            if(raiz->right==nullptr)
+                insertarElemento(raiz->right, elemento);
+    }            
+}
+
+void printTree(Nodo *root){
 
     if(root != nullptr){
-        printNodo(root->left);
+        printTree(root->left);
         cout<<root->dato<<" ";
-        printNodo(root->right);
+        printTree(root->right);
     }
 }
+
+//Funciones de arboles mas complejas 
 
 void searchElement(Nodo *root, int element, bool &condition){
     if(root == nullptr){
@@ -210,7 +227,7 @@ int main(){
     // insertarElemento(arbol.root, 2);
     // insertarElemento(arbol.root, 1);
     // insertarElemento(arbol.root, 3);
-    printNodo(arbol.root);
+    printTree(arbol.root);
     cout<<endl;
 
     bool condition;

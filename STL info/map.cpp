@@ -17,7 +17,7 @@ int main(){
     mapa.insert(make_pair("Inter de Milan",7));
     mapa.insert(make_pair("Bayern Munich",6));
     //mapa.clear();   ---> elimina todos los elementos del mapa
-    mapa.empty(); // verifica si el mapa esta vacio
+    cout<<mapa.empty()<<endl; // verifica si el mapa esta vacio
     mapa.size(); // devuelve el numero de elementos en el mapa
 
     int champions = mapa["Real Madrid"]; // accede al valor asociado a la clave indicada

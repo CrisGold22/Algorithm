@@ -102,4 +102,47 @@ void imprimeMensajeOculto(ArbolBinario &arbol,char **hojaConPalabras){
         if(existePalabra==true)
             cout<<hojaConPalabras[i]<<' ';
     }
-}*/
+}
+
+bool eliminarLetraLista(Lista &lista,char letra){
+    struct Nodo *temp=lista.cabeza,*anterior=nullptr;
+    
+    while(temp){
+        if(temp->elemento==letra)
+            break;
+        
+        anterior=temp;
+        temp=temp->siguiente;
+    }
+    
+    if(temp==nullptr)
+        return false;
+    
+    if(anterior==nullptr){//la letra esta al inicio
+        lista.cabeza=temp->siguiente;
+        delete temp;
+    }else if(temp->siguiente==nullptr){//la letra esta al final de la lista
+        delete temp;
+        anterior->siguiente=nullptr;
+    }else{//la letra esta en el medio
+        anterior->siguiente=temp->siguiente;
+        delete temp;
+    }
+    
+    return true;
+}
+
+bool buscarLetraLista(Lista &lista,char letra){
+    struct Nodo *temp=lista.cabeza;
+    
+    while(temp){
+        if(temp->elemento==letra)
+            return true;
+        
+        temp=temp->siguiente;
+    }
+    return false;
+}
+
+
+*/

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <queue>
 #include <stack>
 #include <algorithm>
@@ -210,6 +211,69 @@ void plantarArbolBinario(struct Arbol & arbol, struct Arbol arbolIzquierdo,
     arbol.root = nuevoNodo;
 }
 
+Nodo *leftRotation(Nodo *root){
+    Nodo *newNodo = root->right;
+    root->right = newNodo->left;
+    newNodo->left = root;
+    return newNodo;
+}
+
+Nodo *rightRotation(Nodo *root){
+    Nodo *newNodo = root->left;
+    root->left = newNodo->right;
+    newNodo->right = root;
+    return newNodo;
+}
+
+Nodo *doubleRightRotation(Nodo *root){
+    root->left = leftRotation(root->left);
+    return rightRotation(root);    
+}
+
+Nodo *doubleLeftRotation(Nodo *root){
+    root->right = rightRotation(root->right);
+    return leftRotation(root);
+}
+
+Nodo *balancedNodo(Nodo *root){
+
+    int leftHeight = heightTree(root->left);
+    int rightHeight = heightTree(root->right);
+    int diference = leftHeight - rightHeight;
+
+    if(diference > 1){
+        if(heightTree(root->left->left) >= heightTree(root->left->right)){
+            root = rightRotation(root);    
+        }
+        else{
+            root = doubleRightRotation(root);
+        }
+    }
+    
+    if(diference < -1){
+        if(heightTree(root->left->left) >= heightTree(root->left->right)){
+            root = leftRotation(root);    
+        }
+        else{
+            root = doubleLeftRotation(root);
+        }
+    }
+
+    return root;
+}
+
+Nodo *balancedTree(Nodo *root){
+    if(root == nullptr){
+        return nullptr;
+    }
+
+    root->left = balancedTree(root->left);
+    root->right = balancedTree(root->right);
+
+    root = balancedNodo(root);
+
+    return root;
+}
 
 int main(){
 

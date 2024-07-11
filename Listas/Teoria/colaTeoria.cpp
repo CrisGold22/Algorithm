@@ -15,14 +15,12 @@ struct Cola
 };
 
 void construir(Cola &cola){
-    Nodo *nuevoNodo = new struct Nodo;
-    nuevoNodo->elemento = 0;
-    cola.cabeza = nuevoNodo;
-    cola.cola = nuevoNodo;
+    cola.cabeza = nullptr;
+    cola.cola = nullptr;
 }
 
 bool esNodoVacio(Nodo *nodo){
-    return nodo->elemento == 0;
+    return nodo == nullptr;
 }
 
 bool esColaVacia(Cola &cola){
@@ -51,6 +49,30 @@ void encolar(Cola &cola, int elemento){
 
 }
 
+int retornaCabeza(Cola &cola){
+    return cola.cabeza->elemento;
+}
+
+void eliminaCabeza(Cola &cola){
+    Nodo *nodo = cola.cabeza;
+
+    if(nodo != nullptr){
+        cola.cabeza = cola.cabeza->siguiente;
+        delete nodo;
+    }
+}
+
+int desencolar(struct Cola & cola){
+    if(esColaVacia(cola)){
+        cout<<"La cola está vacía no se puede desencolar"<<endl;
+        return -10;
+    }
+    int elemento = retornaCabeza(cola);
+    eliminaCabeza(cola);
+    return elemento;
+}
+
+
 void imprimir(Cola cola){
     Nodo *recorrido = cola.cabeza;
     Nodo *anterior = nullptr;
@@ -63,15 +85,41 @@ void imprimir(Cola cola){
     cout<<endl;
 }
 
+void ordenar(Cola &cola, int cantidad){
+    if(esColaVacia(cola)){
+        return;
+    }
+    else{
+        int mayor = desencolar(cola);
+        int m = cantidad;
+        while(m > 0 and not(esColaVacia(cola))){
+            int aux = desencolar(cola);
+            if(mayor > aux){
+                encolar(cola, aux);
+            }
+            else{
+                encolar(cola, mayor);
+                mayor = aux;
+            }
+            m--;
+        }
+        ordenar(cola, cantidad - 1);
+        encolar(cola, mayor);
+    }
+}
+
 int main(){
     
     Cola cola;
     construir(cola);
 
     encolar(cola, 2);           
-    encolar(cola, 2);           
-    encolar(cola, 2);           
-    encolar(cola, 2);           
+    encolar(cola, 4);           
+    encolar(cola, 6);           
+    encolar(cola, 5);           
+    encolar(cola, 3);           
+    encolar(cola, 1);           
+    ordenar(cola, 6);
 
     imprimir(cola);
 

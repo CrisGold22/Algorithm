@@ -94,17 +94,117 @@ void imprime(const struct Lista & tad) {
     }
 }
 
+void cambiar(Nodo *&recorrido1, Nodo *&recorrido2){
+    int aux = recorrido1->elemento;
+    recorrido1->elemento = recorrido2->elemento;
+    recorrido2->elemento = aux;
+}
+
+//mediante bubble sort
+void ordenarLista(Lista &lista){
+
+    bool swapped = true;
+    Nodo *recorrido, *anterior = nullptr;
+
+    while(swapped){
+        recorrido = lista.cabeza;
+        swapped = false;
+        while(recorrido->siguiente != anterior){
+            if(recorrido->elemento > recorrido->siguiente->elemento){
+                cambiar(recorrido, recorrido->siguiente);
+                swapped = true;
+            }
+            recorrido = recorrido->siguiente;
+        }
+        anterior = recorrido;
+    }
+}
+
+void invertir(Lista &lista){
+
+    Nodo *anterior = nullptr, *siguiente = nullptr, *actual = lista.cabeza;
+
+    while(actual != nullptr){
+        siguiente = actual->siguiente;
+        actual->siguiente = anterior;
+
+        anterior = actual;
+        actual = siguiente;
+    }
+
+    lista.cabeza = anterior;
+}
+
+void insertarOrdenado(Lista &lista, int elemento){
+
+    Nodo *nodo = crearNodo(elemento, nullptr);
+
+    if(esListaVacia(lista)){
+        lista.cabeza = nodo;
+        lista.longitud++;
+    }
+    else{
+        Nodo *recorrido = lista.cabeza;
+        Nodo *anterior = nullptr;
+
+        while(true){
+            if(recorrido == nullptr){
+                anterior->siguiente = nodo;
+                lista.longitud++;
+                break;
+            }
+            else{
+                if(recorrido->elemento < nodo->elemento){
+                    anterior = recorrido;
+                    recorrido = recorrido->siguiente;
+                }
+                else{
+                    if(anterior == nullptr){
+                        nodo->siguiente = recorrido;
+                        lista.cabeza = nodo;
+                        lista.longitud++;
+                        break;
+                    }
+                    else{
+                        anterior->siguiente = nodo;
+                        nodo->siguiente = recorrido;
+                        lista.longitud++;
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
 int main(){
 
     Lista lista;
 
     construir(lista);
 
-    insertarAlFinal(lista, 2);
-    insertarAlFinal(lista, 4);
-    insertarAlFinal(lista, 3);
-    insertarAlFinal(lista, 1);
+    // insertarAlFinal(lista, 2);
+    // insertarAlFinal(lista, 4);
+    // insertarAlFinal(lista, 3);
+    // insertarAlFinal(lista, 1);
+    // insertarAlFinal(lista, 5);
+    // insertarAlFinal(lista, 7);
+    // insertarAlFinal(lista, 6);
 
+    insertarOrdenado(lista, 2);
+    insertarOrdenado(lista, 4);
+    insertarOrdenado(lista, 3);
+    insertarOrdenado(lista, 1);
+    insertarOrdenado(lista, 5);
+    insertarOrdenado(lista, 7);
+    insertarOrdenado(lista, 6);
+
+    // imprime(lista);
+    // ordenarLista(lista);
+    // imprime(lista);
+    // invertir(lista);
     imprime(lista);
 
     return 0;

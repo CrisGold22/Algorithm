@@ -227,4 +227,17 @@ ordenar:
         ret
 
 
+//para el calling convention
+section .text
+global suma_asm        ; Declaración global para que sea accesible desde C
+
+suma_asm:
+    ; Argumentos:
+    ;   - rdi -> primer argumento (a)
+    ;   - rsi -> segundo argumento (b)
+    
+    mov rax, rdi        ; Mover el primer argumento (a) a rax
+    add rax, rsi        ; Sumar el segundo argumento (b) a rax
+    ret                 ; Retornar el resultado en rax
+
 

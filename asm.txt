@@ -1,0 +1,74 @@
+section .data
+    arreglo db 1, 2, 3, 4, 5    ; contador inicial
+    longitud equ 5
+
+section .bss
+    numero resb 4
+
+section .text
+    global _start
+
+_start:
+    
+    mov esi, 0 ; iniciar el indice
+
+pacheco:
+    movzx eax, byte [arreglo + esi]
+    call itoa
+
+    mov eax, 4
+    mov ebx, 1 
+    mov ecx, numero
+    mov edx, 4
+    int 0x80
+
+    inc esi
+    cmp esi, longitud
+    jne pacheco
+
+    ;comandos para salir del programa
+    mov eax, 1
+    mov ebx, 0
+    int 0x80
+
+itoa:
+    mov edi, numero     ; Apuntar EDI al buffer
+    add edi, 3         ; Comenzar desde el final del buffer
+    mov byte [edi], 0   ; Null-terminador para la cadena
+    dec edi             ; Ajustar EDI para la primera posición libre
+
+    mov ebx, 10         ; Divisor para obtener dígitos decimales
+
+itoa_loop:
+    xor edx, edx        ; Limpiar EDX para la división
+    div ebx             ; EAX / 10
+    add dl, '0'         ; Convertir el dígito a ASCII
+    mov [edi], dl       ; Almacenar el carácter en el buffer
+    dec edi             ; Mover hacia la siguiente posición
+    test eax, eax       ; ¿EAX es cero?
+    jnz itoa_loop       ; Si no, repetir el ciclo
+
+    inc edi             ; Ajustar EDI para apuntar al inicio de la cadena
+
+    ret                 ; Retornar al llamador
+
+atoi:
+    push rbx                    ; Guardar RBX
+    push rcx                    ; Guardar RCX
+    xor rax, rax                ; Limpiar RAX (resultado final)
+    xor rbx, rbx                ; Limpiar RBX (digito actual)
+
+atoi_loop:
+    mov bl, byte [rsi]          ; Cargar el siguiente carácter
+    cmp bl, 10                  ; ¿Es un salto de línea?
+    je atoi_done                ; Si es fin, salir del bucle
+    sub bl, '0'                 ; Convertir carácter ASCII a número
+    imul rax, rax, 10           ; Multiplicar el resultado actual por 10
+    add rax, rbx                ; Añadir el nuevo dígito
+    inc rsi                     ; Mover al siguiente carácter
+    jmp atoi_loop               ; Repetir el bucle
+
+atoi_done:
+    pop rcx                     ; Restaurar RCX
+    pop rbx                     ; Restaurar RBX
+    ret                         ; Retornar al llamador

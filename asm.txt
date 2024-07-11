@@ -72,3 +72,159 @@ atoi_done:
     pop rcx                     ; Restaurar RCX
     pop rbx                     ; Restaurar RBX
     ret                         ; Retornar al llamador
+
+Fibonacci; section .data
+    numeros db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+    cantNum equ 21
+
+section .bss
+    aquiFibonacci resb cantNum
+    cantNumFibonacci resb 1
+
+section .text
+    global _start
+
+_start:
+    xor bl,bl  ;el numero que avanza para el total de numeros inicializado en 0
+    mov r8b,cantNum  ;r8b =21
+    xor r10,r10 ;"posicion" en la memoria reserbada .bss
+
+    ;para bl= 8 , 11 ,13 ,14
+    bucleMayor:
+        cmp bl,r8b
+        je done
+        mov cl,1
+        xor r9b,r9b ;cantDivisores
+        bucleMenor:
+            cmp cl,bl
+            jg finBucleMenor
+            mov al,bl
+            div cl
+            cmp ah,0
+            je contaDiv
+            jmp paraSaltarBucMenor
+            contaDiv:
+                inc r9b  ;aumenta la cantDivisores
+            paraSaltarBucMenor:
+                xor ah,ah
+                inc cl
+                jmp bucleMenor
+
+        finBucleMenor:
+            cmp r9b,2  ;comparamos la cantDivisores con 2
+            jne paraSaltarBucMayor
+            mov [aquiFibonacci+r10],bl  ;guardamos el numero primo en la memoria reservada
+            inc r10
+            paraSaltarBucMayor:
+                inc bl   ;pasamos a otro numero
+                jmp bucleMayor
+
+    done:
+        mov [cantNumFibonacci], r10b
+
+        mov rax,60
+        mov rdi,0
+        syscall
+MCD y MCM :section .data
+    numA db 54
+    numB db 49
+
+section .bss
+    MCD resb 1
+    MCM resb 1
+
+section .text
+    global _start
+
+_start:
+    mov bl,[numA]   ;le damos el valor que guardamos en numA a bx =54 al inicio
+    mov cl,[numB]   ;Le damos el valor que guardamos en numB a cx =49 al inicio
+    xor bh,bh
+    xor ch,ch
+    mov ax,bx       ;movemos el 54 a ax para la division
+    div cl          ;dividimos entre cl de 8 bits
+    bucle:
+        cmp ah,0       ;el resto sera 5 en nuestro caso        //4 //1   //0
+        je finBucle
+        mov bx,cx      ;le damos 49 al di                                                                                                        videndo               //5  //4
+        mov cl,ah      ;le damos 5 (resto) al divisor          //4  //1
+        xor ch,ch
+        mov ax,bx      ;le damos 49 a ax para la div           //5   //4
+        div cl         ; dividimos entre cl (valor 5)  de 8 bits //4 //1
+        jmp bucle
+
+    finBucle:
+        mov [MCD],cl
+        mov al,[numA]
+        mov r9b,[numB]
+        mul r9b
+        div cx
+        mov [MCM],ax
+
+    mov rax,60
+    mov rdi,0
+    syscall 
+ordena 2 arrays: section .data
+    arrA db 45, 12, 78, 3, 56, 23, 89, 7, 34, 67
+    arrB db 18, 92, 5, 61, 38, 44, 81, 29, 10, 53
+    lenA equ 10
+    lenB equ 10
+section .bss
+    ordenado resb 20
+
+section .text
+    global _start
+
+_start:
+    ;Para ordenar arrA
+    mov r8, lenA
+    mov r14,arrA
+    call ordenar
+
+    ;Para ordenar arrB
+    mov r8,lenB
+    mov r14,arrB
+    call ordenar
+
+    ;salida del programa
+salida:
+    mov rax,60
+    mov rdi,0
+    syscall
+ordenar:
+    xor r10,r10
+    xor rbx,rbx  ;aqui guardaremos el menor
+    xor rcx,rcx
+
+    bucSimple:
+        cmp r10,r8
+        je finBucSimple
+        movzx rbx,byte[r14+r10]   ;rbx=45
+        mov r11,r10
+        inc r11
+        MOV R12,R10
+        bucDoble:
+            cmp r11,r8            ;1<10
+            je finBucDoble
+            movzx rcx,byte[r14+r11]         ;rcx=12
+            cmp rcx,rbx                 ;12 <45
+            jl menor
+            inc r11
+            jmp bucDoble
+            menor:
+                mov rbx,rcx
+                mov r12,r11
+                inc r11
+                jmp bucDoble
+        finBucDoble:
+            mov r13b,[r14+r10]
+            mov [r14+r12],r13b
+            mov [r14+r10],bl
+            inc r10
+            jmp bucSimple
+
+    finBucSimple:
+        ret
+
+
+

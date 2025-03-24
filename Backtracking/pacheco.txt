@@ -1,0 +1,1 @@
+Este viene a ser el primer archivo para el curso de Algoritmos avanzados

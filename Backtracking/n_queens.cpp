@@ -11,6 +11,8 @@ using namespace std;
     [][][][q]
 */
 
+//cambio que se hizo al archivo
+
 bool isSafe(vector<vector<int>> board, int i, int col){
     return true;
 }

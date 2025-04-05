@@ -10,7 +10,6 @@ using namespace std;
 [ ][x][ ][ ]
 */
 
-<<<<<<< HEAD
 bool validSolution(vector<vector<int>> &table, int rows, int columns, int num){
     for(int i=0 ; i < num ; i++){
         if(table[i][columns] == table[rows][columns]) continue;
@@ -40,11 +39,6 @@ bool validSolution(vector<vector<int>> &table, int rows, int columns, int num){
         }
     }
 
-=======
-//cambio que se hizo al archivo
-
-bool isSafe(vector<vector<int>> board, int i, int col){
->>>>>>> 812e6e4f4401e460398f9ec71c02f70f453dcd68
     return true;
 }
 

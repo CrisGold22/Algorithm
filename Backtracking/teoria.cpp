@@ -11,7 +11,7 @@ void findSolution(/*parameters*/){
 
     for(/*all choice*/int i=0 ;i < 9; i++){
         if(true /*valid choice*/){
-            //apply(choice);
+            //apply(choice) ;
             findSolution(/*parameters*/);
             //backtrack(remove choice);
         }

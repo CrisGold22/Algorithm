@@ -3,53 +3,77 @@
 #include <vector>
 #include <cmath>
 using namespace std;
-
 /*
-    [][q][][]
-    [q][][][]
-    [][][q][]
-    [][][][q]
+[ ][ ][x][ ]
+[x][ ][ ][ ]
+[ ][ ][ ][x]
+[ ][x][ ][ ]
 */
 
-bool isSafe(vector<vector<int>> board, int i, int col){
+bool validSolution(vector<vector<int>> &table, int rows, int columns, int num){
+    for(int i=0 ; i < num ; i++){
+        if(table[i][columns] == table[rows][columns]) continue;
+
+        if(table[i][columns] == 1){
+            return false;
+        }
+    }
+
+    for(int i=0 ; i < num ; i++){
+        if(table[rows][i] == table[rows][columns]) continue;
+
+        if(table[rows][i] == 1){
+            return false;
+        }
+    }
+
+    for(int i = rows - 1, j = columns - 1 ; i > - 1 and j > -1 ; i--, j--){
+        if(table[i][j] == 1){
+            return false;
+        }
+    }
+
+    for(int i = rows - 1, j = 0 ; i > -1 and j < num ; i++){
+        if(table[i][j] == 1){
+            return false;
+        }
+    }
+
     return true;
 }
 
-bool solution(vector<vector<int>> board, int col){
-    int n = board.size();
+void solve_N_queens(vector<vector<int>> &table, int rows, int num){
 
-    if(col >= n){
-        return true;
+    if(rows == num){
+        return;
     }
 
-    for(int i=0 ; i < n ; i++){
-        if(isSafe(board, i, col)){
-            board[i][col] = 1;
-            if(solution(board, col + 1)){
-                return true;
-            }
-            board[i][col] = 0;
+    for(int i=0 ; i < num ; i++){
+        if(validSolution(table, rows, i, num)){
+            table[rows][i] = 1;
+            solve_N_queens(table, rows + 1, num);
+            table[rows][i] = 0;
         }
     }
-    return false;
 }
 
-void solve_N_queens(int num){
-    vector<vector<int>> board(num, vector<int>(num,0));
-
-    if(solution(board, 0) == false){
-        cout<<"Doesn't exist any solution"<<endl;
-    }
-    else{
-
+void printSolution(const vector<vector<int>> &table, int num){
+    for(int i=0 ; i < num ; i++){
+        for(int j=0 ; j < num ; j++){
+            cout<<table[i][j]<<" ";
+        }
+        cout<<endl;
     }
 }
 
 int main(){
 
     int num; cin>>num;
+    vector<vector<int>> table(num, vector<int>(num, 0));
 
-    solve_N_queens(num);
+    solve_N_queens(table, 0, num);
+    
+    printSolution(table, num);
 
     return 0;
 }

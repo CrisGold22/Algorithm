@@ -1,39 +1,20 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <cmath>
+#include <bits/stdc++.h>
 using namespace std;
-/*
-[ ][ ][x][ ]
-[x][ ][ ][ ]
-[ ][ ][ ][x]
-[ ][x][ ][ ]
-*/
 
-bool validSolution(vector<vector<int>> &table, int rows, int columns, int num){
+bool validMovement(vector<vector<int>> &table, int rows, int columns, int num){
     for(int i=0 ; i < num ; i++){
-        if(table[i][columns] == table[rows][columns]) continue;
-
         if(table[i][columns] == 1){
             return false;
         }
-    }
+    }    
 
-    for(int i=0 ; i < num ; i++){
-        if(table[rows][i] == table[rows][columns]) continue;
-
-        if(table[rows][i] == 1){
-            return false;
-        }
-    }
-
-    for(int i = rows - 1, j = columns - 1 ; i > - 1 and j > -1 ; i--, j--){
+    for(int i = rows - 1, j = columns - 1; i > -1 and j > -1 ; i--, j--){
         if(table[i][j] == 1){
             return false;
         }
     }
 
-    for(int i = rows - 1, j = 0 ; i > -1 and j < num ; i++){
+    for(int i = rows, j = columns - 1; i < num and j < - 1 ; i++, j--){
         if(table[i][j] == 1){
             return false;
         }
@@ -42,19 +23,23 @@ bool validSolution(vector<vector<int>> &table, int rows, int columns, int num){
     return true;
 }
 
-void solve_N_queens(vector<vector<int>> &table, int rows, int num){
-
+bool solve_N_queens(vector<vector<int>> &table, int rows, int num){
     if(rows == num){
-        return;
+        return true;
     }
 
-    for(int i=0 ; i < num ; i++){
-        if(validSolution(table, rows, i, num)){
+    //recorre por las columnas
+    for(int i = 0 ; i < num ; i++){
+        if(validMovement(table, rows, i, num)){
             table[rows][i] = 1;
-            solve_N_queens(table, rows + 1, num);
+            if(solve_N_queens(table, rows + 1, num)){
+                return true;
+            }
             table[rows][i] = 0;
         }
     }
+
+    return false;
 }
 
 void printSolution(const vector<vector<int>> &table, int num){
@@ -67,13 +52,17 @@ void printSolution(const vector<vector<int>> &table, int num){
 }
 
 int main(){
-
+    cout<<"Ingrese el numero de casilleros NxN: "<<endl;
     int num; cin>>num;
     vector<vector<int>> table(num, vector<int>(num, 0));
 
-    solve_N_queens(table, 0, num);
-    
-    printSolution(table, num);
+
+    if(solve_N_queens(table, 0, num)){
+        printSolution(table, num);
+    } 
+    else{
+        cout<<"Doesn't exist any solution"<<endl;
+    }
 
     return 0;
 }

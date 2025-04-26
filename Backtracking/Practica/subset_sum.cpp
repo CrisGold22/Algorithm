@@ -18,7 +18,6 @@ bool verifyNum(const vector<int> &pacheco, vector<int> &result, int sum, int lev
 
 void solve(const vector<int> &pacheco, vector<int> &result, int sum, int length, int level){
     if(level == length){
-
         return;
     }
 

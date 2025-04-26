@@ -1,40 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int dp_knap(const vector<int> &profit, const vector<int> &weight, int limit){
-    int length = weight.size();
-    vector<vector<int>> dp (length + 1, vector<int> (limit + 1));
+int solve(const vector<int> &profit, const vector<int> &weight, int num){
+    int n = profit.size();
 
-    for(int i = 0 ; i <= length ; i++){
-        for(int j = 0 ; j <= limit ; j++){
-            if(i == 0 or j == 0){
-                dp[i][j] = 0;
+    vector<vector<int>> dp(n + 1, vector<int> (num + 1));
+
+    for(int i = 0 ; i < n + 1; i++){
+        dp[i][0] = 0;
+    }
+
+    for(int i = 0 ; i < num + 1; i++){
+        dp[0][i] = 0;
+    }
+
+    for(int i = 1 ; i <= n ; i++){
+        for(int j = 1 ; j <= num ; j++){
+            if(j < weight[i - 1]){
+                dp[i][j] = dp[i - 1][j];
             }
             else{
-                int pick = 0;
-                if(weight[i - 1] <= j){
-                    pick = profit[i - 1] + dp[i - i][j - weight[i -1]];
-                }
-                int notPick = dp[i - 1][j];
-                dp[i][j] = max(pick, notPick);
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i - 1]] + profit[i - 1]);
             }
         }
     }
-    
-    return dp[length][limit];  
-}
 
-int knapSol(int limit){
-    vector<int> profit = {1, 2, 3};
-    vector<int> weight = {4, 5, 6};
-
-    return dp_knap(profit, weight, limit);
+    return dp[n][num];
 }
 
 int main(){
-    int limit = 3;
+    // problema de la mochila
 
-    cout<<knapSol(limit)<<endl;
+    vector<int> profit = {1, 2, 3}, weight = {4, 5, 1};
+    int num = 9;
+
+    cout<<solve(profit, weight, num)<<endl;
 
     return 0;
 }
